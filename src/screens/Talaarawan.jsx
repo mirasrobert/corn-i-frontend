@@ -5,6 +5,8 @@ import ProtectedRoute from '../components/ProtectedRoute'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSoilTests } from '../features/soiltestSlice'
 
+import Modal from 'react-modal'
+
 function Talaarawan() {
   const dispatch = useDispatch()
 
@@ -62,6 +64,16 @@ function Talaarawan() {
     },
   ])
 
+  const [modalIsOpen, setIsOpen] = React.useState(false)
+
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
   if (loading) {
     return (
       <div className='flex justify-center items-center w-full pt-16'>
@@ -77,7 +89,53 @@ function Talaarawan() {
   return (
     <>
       <ProtectedRoute>
-        <h1 className='text-3xl mb-3'>Talaarawan </h1>
+        <div className='flex justify-between mb-3'>
+          <h1 className='text-3xl mb-3'>Talaarawan </h1>
+          <button
+            className='mb-1.5 block text-center text-white bg-green-700 hover:bg-green-900 px-2 py-1.5 rounded-md'
+            onClick={openModal}>
+            Open Modal
+          </button>
+        </div>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          className='modal'
+          contentLabel='Modal Form'>
+          <form>
+            <div className='mb-3'>
+              <label className='mb-2 block text-xs font-semibold'>
+                Site Of Farm
+              </label>
+              <input
+                type='text'
+                placeholder=''
+                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                required
+              />
+            </div>
+
+            <div className='mb-3'>
+              <label className='mb-2 block text-xs font-semibold'>
+                Client Name
+              </label>
+              <input
+                type='text'
+                placeholder=''
+                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                required
+              />
+            </div>
+
+            <div className='mb-3'>
+              <button
+                type='submit'
+                className='mb-1.5 block w-full text-center text-white bg-green-700 hover:bg-green-900 px-2 py-1.5 rounded-md'>
+                Sign in
+              </button>
+            </div>
+          </form>
+        </Modal>
         {DATA.length > 0 ? (
           <>
             <Table columns={COLUMNS} data={DATA} />

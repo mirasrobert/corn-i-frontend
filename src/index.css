@@ -11,3 +11,25 @@
 .container-size {
   width: 980px;
 }
+
+/* MODAL */
+.modal {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  max-width: 1366px;
+  width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  outline: none;
+}
+
+.modal h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}

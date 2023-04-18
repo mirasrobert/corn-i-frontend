@@ -9,6 +9,11 @@ import Login from './screens/Login'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import Modal from 'react-modal'
+
+// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root')
+
 function App() {
   const location = useLocation()
 
