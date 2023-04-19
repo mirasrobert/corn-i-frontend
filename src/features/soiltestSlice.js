@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const API_URL = import.meta.env.VITE_API_URI
 
@@ -64,15 +65,24 @@ const soiltestSlice = createSlice({
       state.error = action.payload.message
     },
     [createSoilTest.pending]: (state) => {
-      state.loading = true
+      //state.loading = true
     },
     [createSoilTest.fulfilled]: (state, action) => {
-      state.loading = false
+      //state.loading = false
       state.soiltests.push(action.payload)
+
+      toast.success('Soiltest record has been added')
     },
     [createSoilTest.rejected]: (state, action) => {
-      state.loading = false
-      state.error = action.payload.message
+      //state.loading = false
+      if (action.payload.message) {
+        state.error = action.payload.message
+        toast.error(action.payload.message)
+      }
+
+      if (action.payload.error) {
+        toast.error(action.payload.error)
+      }
     },
   },
 })

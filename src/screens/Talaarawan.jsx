@@ -3,9 +3,10 @@ import Table from '../components/Table'
 import ProtectedRoute from '../components/ProtectedRoute'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchSoilTests } from '../features/soiltestSlice'
+import { fetchSoilTests, createSoilTest } from '../features/soiltestSlice'
 
 import Modal from 'react-modal'
+import { toast } from 'react-toastify'
 
 function Talaarawan() {
   const dispatch = useDispatch()
@@ -52,6 +53,10 @@ function Talaarawan() {
       accessor: 'K',
     },
     {
+      Header: 'pH',
+      accessor: 'pH',
+    },
+    {
       Header: 'Date',
       accessor: 'date_reported',
     },
@@ -72,6 +77,95 @@ function Talaarawan() {
 
   function closeModal() {
     setIsOpen(false)
+  }
+
+  const [formData, setFormData] = useState({
+    farm_site: '',
+    client_name: '',
+    lab_no: '',
+    N: '',
+    P: '',
+    MC: '',
+    pH: '',
+    K: '',
+    date_reported: '',
+  })
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+
+    // parse the "N", "P", "K" input values as integers
+    const intValue =
+      (name === 'N' || name === 'P' || name === 'K') && value !== ''
+        ? parseInt(value)
+        : value
+
+    //parse the "pH" abd "MC" input value as a float
+    const floatValue =
+      name === 'pH' || name === 'MC' ? parseFloat(intValue) : intValue
+
+    setFormData({
+      ...formData,
+      [name]: floatValue,
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    // Validate required fields
+    const requiredFields = [
+      'farm_site',
+      'client_name',
+      'lab_no',
+      'N',
+      'P',
+      'MC',
+      'pH',
+      'K',
+      'date_reported',
+    ]
+    const missingFields = requiredFields.filter((field) => !formData[field])
+    if (missingFields.length > 0) {
+      //toast.error(`Missing required fields: ${missingFields.join(', ')}`)
+      toast.error('All fields are required.')
+      return
+    }
+
+    // Validate N, P, K are integers and pH, MC are floats
+    const isInt = (value) => /^\d+$/.test(value.toString())
+    const isFloat = (value) => /^\d+\.\d+$/.test(value.toString())
+    if (!isInt(formData.N) || !isInt(formData.P) || !isInt(formData.K)) {
+      toast.error('N, P, and K must be integer values.')
+      return
+    }
+
+    const regex = /^\d+\.\d{2}$/
+
+    const isFloatWithTwoDecimalPlaces = (value) => regex.test(value.toString())
+    if (
+      !isFloatWithTwoDecimalPlaces(formData.pH) ||
+      !isFloatWithTwoDecimalPlaces(formData.MC)
+    ) {
+      toast.error('pH and MC must be float values with 2 decimal places.')
+      return
+    }
+
+    dispatch(createSoilTest(formData))
+
+    closeModal()
+
+    setFormData({
+      farm_site: '',
+      client_name: '',
+      lab_no: '',
+      N: '',
+      P: '',
+      MC: '',
+      pH: '',
+      K: '',
+      date_reported: '',
+    })
   }
 
   if (loading) {
@@ -102,17 +196,33 @@ function Talaarawan() {
           onRequestClose={closeModal}
           className='modal'
           contentLabel='Modal Form'>
-          <form>
-            <div className='mb-3'>
+          <form onSubmit={handleSubmit}>
+            <h1 className='font-bold text-lg'>Add Soil Test Record</h1>
+            <hr />
+            <div className='my-3'>
               <label className='mb-2 block text-xs font-semibold'>
                 Site Of Farm
               </label>
-              <input
-                type='text'
-                placeholder=''
-                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
-                required
-              />
+              <select
+                onChange={handleInputChange}
+                name='farm_site'
+                value=''
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 focus:outline-none'>
+                <option value='' disabled>
+                  Choose a site / barangay
+                </option>
+                <option value='Bukal Sur'>Bukal Sur</option>
+                <option value='Malabanan Norte'>Malabanan Norte</option>
+                <option value='Malabanan Sur'>Malabanan Sur</option>
+                <option value='Mangilag Norte'>Mangilag Norte</option>
+                <option value='Mangilag Sur'>Mangilag Sur</option>
+                <option value='Masalukot I'>Masalukot I</option>
+                <option value='Masalukot II'>Masalukot II</option>
+                <option value='Mayabobo'>Mayabobo</option>
+                <option value='Pahinga Norte'>Pahinga Norte</option>
+                <option value='San Andres'>San Andres</option>
+                <option value='Sta. Catalina Norte'>Sta. Catalina Norte</option>
+              </select>
             </div>
 
             <div className='mb-3'>
@@ -123,7 +233,111 @@ function Talaarawan() {
                 type='text'
                 placeholder=''
                 className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
-                required
+                name='client_name'
+                value={formData.client_name}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className='mb-3'>
+              <label className='mb-2 block text-xs font-semibold'>
+                Lab No.
+              </label>
+              <input
+                type='text'
+                placeholder=''
+                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                name='lab_no'
+                value={formData.lab_no}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='mb-3'>
+                <label className='mb-2 block text-xs font-semibold'>
+                  Nitrogen (N)
+                </label>
+                <input
+                  type='number'
+                  placeholder=''
+                  className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                  name='N'
+                  value={formData.N}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className='mb-3'>
+                <label className='mb-2 block text-xs font-semibold'>
+                  Phosphorus (P)
+                </label>
+                <input
+                  type='number'
+                  placeholder=''
+                  className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                  name='P'
+                  value={formData.P}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='mb-3'>
+                <label className='mb-2 block text-xs font-semibold'>
+                  Potassium (K)
+                </label>
+                <input
+                  type='number'
+                  placeholder=''
+                  className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                  name='K'
+                  value={formData.K}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className='mb-3'>
+                <label className='mb-2 block text-xs font-semibold'>pH</label>
+                <input
+                  type='number'
+                  placeholder=''
+                  step='0.01'
+                  className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                  name='pH'
+                  value={formData.pH}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className='mb-3'>
+              <label className='mb-2 block text-xs font-semibold'>
+                MC (weight of water)
+              </label>
+              <input
+                type='number'
+                placeholder=''
+                step='0.01'
+                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                name='MC'
+                value={formData.MC}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className='mb-3'>
+              <label className='mb-2 block text-xs font-semibold'>
+                Date Reported
+              </label>
+              <input
+                type='date'
+                placeholder=''
+                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                name='date_reported'
+                value={formData.date_reported}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -131,7 +345,7 @@ function Talaarawan() {
               <button
                 type='submit'
                 className='mb-1.5 block w-full text-center text-white bg-green-700 hover:bg-green-900 px-2 py-1.5 rounded-md'>
-                Sign in
+                Submit
               </button>
             </div>
           </form>
