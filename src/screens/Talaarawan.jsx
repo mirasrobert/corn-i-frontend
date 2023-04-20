@@ -7,6 +7,7 @@ import { fetchSoilTests, createSoilTest } from '../features/soiltestSlice'
 
 import Modal from 'react-modal'
 import { toast } from 'react-toastify'
+import DefaultLoader from '../components/DefaultLoader'
 
 function Talaarawan() {
   const dispatch = useDispatch()
@@ -171,11 +172,7 @@ function Talaarawan() {
   if (loading) {
     return (
       <div className='flex justify-center items-center w-full pt-16'>
-        <img
-          src='https://media.tenor.com/wfEN4Vd_GYsAAAAM/loading.gif'
-          alt='loader'
-          className='h-full'
-        />
+        <DefaultLoader />
       </div>
     )
   }
@@ -206,7 +203,7 @@ function Talaarawan() {
               <select
                 onChange={handleInputChange}
                 name='farm_site'
-                value=''
+                value={formData.farm_site}
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 focus:outline-none'>
                 <option value='' disabled>
                   Choose a site / barangay

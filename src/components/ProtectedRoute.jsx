@@ -5,6 +5,8 @@ import { getUser } from '../features/authSlice'
 
 import { useNavigate } from 'react-router-dom'
 
+import DefaultLoader from './DefaultLoader'
+
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch()
 
@@ -19,11 +21,7 @@ const ProtectedRoute = ({ children }) => {
   if (loading) {
     return (
       <div className='flex justify-center items-center w-full pt-16'>
-        <img
-          src='https://media.tenor.com/wfEN4Vd_GYsAAAAM/loading.gif'
-          alt='loader'
-          className='h-full'
-        />
+        <DefaultLoader />
       </div>
     )
   }
