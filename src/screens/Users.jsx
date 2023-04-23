@@ -32,6 +32,10 @@ function Talaarawan() {
       accessor: 'id',
     },
     {
+      Header: 'Full Name',
+      accessor: 'full_name',
+    },
+    {
       Header: 'Email address',
       accessor: 'email',
     },
@@ -99,7 +103,13 @@ function Talaarawan() {
     event.preventDefault()
 
     // Validate required fields
-    const requiredFields = ['email', 'password', 'confirm_password']
+    const requiredFields = [
+      'full_name',
+      'email',
+      'password',
+      'confirm_password',
+    ]
+
     const missingFields = requiredFields.filter((field) => !formData[field])
     if (missingFields.length > 0) {
       toast.error('All fields are required.')
@@ -122,6 +132,7 @@ function Talaarawan() {
     closeModal()
 
     setFormData({
+      full_name: '',
       email: '',
       password: '',
       confirm_password: '',
@@ -157,6 +168,20 @@ function Talaarawan() {
             <hr />
 
             <div className='my-3'>
+              <label className='mb-2 block text-xs font-semibold'>
+                Full Name
+              </label>
+              <input
+                type='text'
+                placeholder=''
+                className='block w-full rounded-md border border-gray-300 focus:border-green-700 focus:outline-none focus:ring-1 focus:ring-green-700 py-1 px-1.5 text-gray-500'
+                name='full_name'
+                value={formData.full_name}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className='mb-3'>
               <label className='mb-2 block text-xs font-semibold'>
                 Email Address
               </label>
