@@ -42,6 +42,25 @@ export const createSoilTest = createAsyncThunk(
   }
 )
 
+export const deleteSoilTest = createAsyncThunk(
+  'soiltests/delete',
+  async (id, { rejectWithValue }) => {
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('token'),
+      },
+    }
+
+    try {
+      const response = await axios.delete(`${API_URL}/soiltest/${id}`, options)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 const initialState = {
   loading: true,
   soiltests: [],
@@ -75,6 +94,29 @@ const soiltestSlice = createSlice({
     },
     [createSoilTest.rejected]: (state, action) => {
       //state.loading = false
+      if (action.payload.message) {
+        state.error = action.payload.message
+        toast.error(action.payload.message)
+      }
+
+      if (action.payload.error) {
+        toast.error(action.payload.error)
+      }
+    },
+
+    [deleteSoilTest.pending]: (state) => {
+      // state.loading = true
+    },
+    [deleteSoilTest.fulfilled]: (state, action) => {
+      // state.loading = false
+      const deletedId = action.payload.id
+      state.soiltests = state.soiltests.filter(
+        (soiltest) => soiltest.id !== deletedId
+      )
+      toast.success('Soiltest record has been deleted')
+    },
+    [deleteSoilTest.rejected]: (state, action) => {
+      // state.loading = false
       if (action.payload.message) {
         state.error = action.payload.message
         toast.error(action.payload.message)

@@ -5,6 +5,7 @@ import Forecasting from './screens/Forecasting'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Login from './screens/Login'
+import Users from './screens/Users'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -28,6 +29,7 @@ function App() {
         <Route path='/talaarawan' element={<Talaarawan />} />
         <Route path='/forecasting' element={<Forecasting />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/accounts' element={<Users />} />
       </Routes>
       <ToastContainer />
     </div>

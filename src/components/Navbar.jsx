@@ -41,6 +41,11 @@ const Navbar = () => {
                 className='text-white hover:bg-gray-700 px-3 py-2 rounded-md text-lg font-medium'>
                 Forecasting
               </NavLink>
+              <NavLink
+                to='/accounts'
+                className='text-white hover:bg-gray-700 px-3 py-2 rounded-md text-lg font-medium'>
+                Accounts
+              </NavLink>
               <li
                 onClick={() => logout()}
                 className='text-white hover:bg-gray-700 px-3 py-2 rounded-md text-lg font-medium list-none hover:cursor-pointer'>

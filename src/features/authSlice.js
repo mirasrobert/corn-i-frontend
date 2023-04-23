@@ -71,6 +71,7 @@ const authSlice = createSlice({
     token: null,
     loading: false,
     error: null,
+    users: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -120,10 +121,8 @@ const authSlice = createSlice({
           : null
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload.message
-        state.user = null
-        state.token = null
+        state.loading = true
+        state.error = action.payload
       })
   },
 })
