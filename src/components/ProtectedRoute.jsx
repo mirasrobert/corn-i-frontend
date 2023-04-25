@@ -12,11 +12,15 @@ const ProtectedRoute = ({ children }) => {
 
   const navigate = useNavigate()
 
-  const { user, loading } = useSelector((state) => state.auth)
+  const { user, loading, error } = useSelector((state) => state.auth)
 
   useEffect(() => {
     dispatch(getUser())
   }, [])
+
+  if (error) {
+    return navigate('/login')
+  }
 
   if (loading) {
     return (
