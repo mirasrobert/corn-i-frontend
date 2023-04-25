@@ -12,6 +12,7 @@ import ic_fertilizer from '../assets/images/ic_fertilizer.png'
 import Forecasted from '../components/Forecasted'
 import Table from '../components/Table'
 import Card from '../components/Card'
+import SoilTestChart from '../components/SoilTestChart'
 
 const Forecasting = () => {
   const forecasting = useSelector((state) => state.forecasting)
@@ -151,6 +152,9 @@ const Forecasting = () => {
               <Card date={forecasting.soiltest.date_reported} />
             </div>
             <Forecasted predictions={forecasting.predictions} />
+            <div className='my-3 w-full'>
+              <SoilTestChart />
+            </div>
           </>
         )}
 

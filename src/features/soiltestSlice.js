@@ -23,6 +23,25 @@ export const fetchSoilTests = createAsyncThunk(
   }
 )
 
+export const fetchSomeSoilTests = createAsyncThunk(
+  'soiltests/fetchSoilTests',
+  async (_, { rejectWithValue }) => {
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('token'),
+      },
+    }
+
+    try {
+      const response = await axios.get(`${API_URL}/soiltests/${5}`, options)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
 export const createSoilTest = createAsyncThunk(
   'soiltests/create',
   async (fields, { rejectWithValue }) => {
@@ -80,6 +99,17 @@ const soiltestSlice = createSlice({
       state.soiltests = action.payload
     },
     [fetchSoilTests.rejected]: (state, action) => {
+      state.loading = false
+      state.error = action.payload.message
+    },
+    [fetchSomeSoilTests.pending]: (state) => {
+      state.loading = true
+    },
+    [fetchSomeSoilTests.fulfilled]: (state, action) => {
+      state.loading = false
+      state.soiltests = action.payload
+    },
+    [fetchSomeSoilTests.rejected]: (state, action) => {
       state.loading = false
       state.error = action.payload.message
     },
