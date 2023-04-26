@@ -25,7 +25,7 @@ export const fetchSoilTests = createAsyncThunk(
 
 export const fetchSomeSoilTests = createAsyncThunk(
   'soiltests/fetchSoilTests',
-  async (_, { rejectWithValue }) => {
+  async (farmSite, { rejectWithValue }) => {
     const options = {
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,10 @@ export const fetchSomeSoilTests = createAsyncThunk(
     }
 
     try {
-      const response = await axios.get(`${API_URL}/soiltests/${5}`, options)
+      const response = await axios.get(
+        `${API_URL}/soiltests/${5}?farm_site=${farmSite}`,
+        options
+      )
       return response.data
     } catch (error) {
       return rejectWithValue(error.response.data)

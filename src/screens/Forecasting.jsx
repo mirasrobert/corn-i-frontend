@@ -153,7 +153,7 @@ const Forecasting = () => {
             </div>
             <Forecasted predictions={forecasting.predictions} />
             <div className='my-3 w-full'>
-              <SoilTestChart />
+              <SoilTestChart farmSite={farmSite} />
             </div>
           </>
         )}

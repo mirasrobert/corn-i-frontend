@@ -5,12 +5,12 @@ import { fetchSomeSoilTests } from '../features/soiltestSlice'
 
 import ChartContainer from './ChartContainer'
 
-const SoilTestChart = () => {
+const SoilTestChart = ({ farmSite }) => {
   const dispatch = useDispatch()
   const soil = useSelector((state) => state.soiltest)
 
   useEffect(() => {
-    dispatch(fetchSomeSoilTests())
+    dispatch(fetchSomeSoilTests(farmSite))
   }, [])
 
   const labels = soil.soiltests.map((obj) => obj.date_reported)
