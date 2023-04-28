@@ -70,7 +70,7 @@ const CandelariaMap = ({ mapData }) => {
 
     let dataName = data.properties.name
 
-    let rand = Math.random() * 50
+    let rand = Math.floor(Math.random() * 50)
 
     if (!dataName.toLowerCase().includes('farm')) {
       dataName = dataName + ' Farm'
@@ -95,6 +95,8 @@ const CandelariaMap = ({ mapData }) => {
     const colorIndex = Math.floor(Math.random() * color_brgy.length)
     layer.options.fillColor = color_brgy[colorIndex] //0
     layer.options.color = color_brgy[colorIndex]
+
+    layer.bindPopup(data.properties.name)
   }
 
   const changeFeatureColor = (event) => {

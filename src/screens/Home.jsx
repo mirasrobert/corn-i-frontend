@@ -273,7 +273,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div class='grid grid-rows-2 grid-flow-col gap-4'>
+            <div className='grid grid-rows-2 grid-flow-col gap-4'>
               {coordinates.map((coordinate, index) => (
                 <div key={index} className='mb-3'>
                   <label className='mb-2 block text-xs font-semibold'>
