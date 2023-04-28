@@ -12,18 +12,19 @@ import {
   LayerGroup,
 } from 'react-leaflet'
 
-import mapData from '../geojson/corn_areas.json'
+//import mapData from '../geojson/corn_areas.json'
 import barangayData from '../geojson/barangay.json'
 
 import { customIcon } from './MapIcon'
 
-const CandelariaMap = () => {
+const CandelariaMap = ({ mapData }) => {
   const [map, setMap] = useState(null)
 
   // Define the state variables using the useState hook
   const [mapConfig, setMapConfig] = useState({
     style: {
       height: '80vh',
+      zIndex: '1',
     },
     center: [13.911638, 121.427189],
     zoom: 17,
